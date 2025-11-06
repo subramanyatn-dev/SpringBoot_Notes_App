@@ -12,30 +12,22 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtUtil {
-
     @Value("${app.jwt.secret}")
     private String secret;
 
-    @Value("${app.jwt.ttl}")
-    private long ttlMillis;
-
-    // Generate JWT
     public String generate(String email, String role) {
-        long now = System.currentTimeMillis();
         return Jwts.builder()
-                .setSubject(email)
-                .addClaims(Map.of("role", role))
-                .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + ttlMillis))
-                .signWith(SignatureAlgorithm.HS256, secret)
-                .compact();
+            .setSubject(email)
+            .addClaims(Map.of("role", role))
+            .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 24 hours
+            .signWith(SignatureAlgorithm.HS256, secret)
+            .compact();
     }
 
-    // Validate JWT
     public Claims validate(String token) {
         return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
+            .setSigningKey(secret)
+            .parseClaimsJws(token)
+            .getBody();
     }
 }

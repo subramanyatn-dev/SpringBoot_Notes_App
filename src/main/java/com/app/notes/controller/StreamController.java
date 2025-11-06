@@ -34,7 +34,7 @@ public class StreamController {
         return ResponseEntity.ok(streams);
     }
 
-    // GET /streams/{id} - Get specific stream
+    // GET /streams/{id} - Get specific stream // not being used !!!!
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
@@ -60,6 +60,7 @@ public class StreamController {
         Stream stream = streamService.create(name);
         return ResponseEntity.ok(stream);
     }
+
 
     // DELETE /streams/{id} - Delete stream (ADMIN only)
     @DeleteMapping("/{id}")

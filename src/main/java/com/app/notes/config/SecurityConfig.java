@@ -10,7 +10,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 public class SecurityConfig {
-
     private final JwtFilter jwtFilter;
 
     public SecurityConfig(JwtFilter jwtFilter) {
@@ -21,29 +20,28 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(sess -> 
+                sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/login").permitAll()
+                // Public endpoints
+                .requestMatchers(
+                    "/auth/login", 
+                    "/auth/register",
+                    "/",
+                    "/index.html",
+                    "/styles.css",
+                    "/app.js"
+                ).permitAll()
                 
-                // Stream endpoints
-                .requestMatchers(HttpMethod.GET, "/streams/**").hasAnyRole("USER", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/streams").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/streams/**").hasRole("ADMIN")
+                // User & Admin endpoints
+                .requestMatchers(HttpMethod.GET, "/**")
+                    .hasAnyRole("USER", "ADMIN")
                 
-                // Semester endpoints
-                .requestMatchers(HttpMethod.GET, "/streams/*/semesters/**").hasAnyRole("USER", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/streams/*/semesters").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/streams/*/semesters/**").hasRole("ADMIN")
-                
-                // Subject endpoints
-                .requestMatchers(HttpMethod.GET, "/semesters/*/subjects/**").hasAnyRole("USER", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/semesters/*/subjects").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/semesters/*/subjects/**").hasRole("ADMIN")
-                
-                // Note endpoints
-                .requestMatchers(HttpMethod.GET, "/subjects/*/notes/**").hasAnyRole("USER", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/subjects/*/notes").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/subjects/*/notes/**").hasRole("ADMIN")
+                // Admin-only endpoints
+                .requestMatchers(HttpMethod.POST, "/**")
+                    .hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/**")
+                    .hasRole("ADMIN")
                 
                 .anyRequest().authenticated()
             )
