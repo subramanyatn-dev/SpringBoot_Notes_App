@@ -106,7 +106,7 @@ The system comes with two pre-configured users:
 
 | Email | Password | Role |
 |-------|----------|------|
-| admin@example.com | 1234 | ADMIN |
+| check_code | 1234 | ADMIN |
 | user@example.com | 1234 | USER |
 
 ⚠️ **Important**: Change these credentials before deploying to production!
