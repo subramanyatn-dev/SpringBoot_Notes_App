@@ -1,7 +1,9 @@
 # 📚 Academic Notes Management System
 
 A comprehensive Spring Boot REST API for managing academic notes with a hierarchical structure: **Stream → Semester → Subject → Note**. Features include JWT authentication, role-based access control, and Google Cloud Storage integration for PDF file management.
-
+[Live_Link_click](http://34.123.177.252:8080)
+![pic1](1.png)
+![pic2](2.png)
 ## 🌟 Features
 
 - **Hierarchical Structure**: Organize notes by Stream (CSE, ECE, etc.) → Semester (1-8) → Subject → Individual Notes
